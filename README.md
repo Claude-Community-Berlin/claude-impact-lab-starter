@@ -1,6 +1,10 @@
 > 👋 **Starter for Claude Impact Lab teams.** Fill in each section below as you build and delete this note.
-> Event info, rules and the submission form live in your event's repo.
-> Set your API key first: `cp .env.example .env`, then paste your key into `.env` (it's git-ignored, never commit it).
+>
+> 📅 **Agenda, rules, deadline and judging** are in the event repo: **[claude-impact-lab-berlin-2026-10-17](https://github.com/Claude-Community-Berlin/claude-impact-lab-berlin-2026-10-17)**. Read it first.
+>
+> ✅ **When you're finished:** submit by **[opening a 🚀 Team submission issue](https://github.com/Claude-Community-Berlin/claude-impact-lab-berlin-2026-10-17/issues/new?template=submission.yml)** in the event repo. Do it before the deadline.
+>
+> 🔑 Set your API key first: `cp .env.example .env`, then paste your key into `.env` (it's git-ignored, never commit it).
 
 # <Project name>
 
