@@ -27,5 +27,6 @@ There is a hard submission deadline (usually mid-afternoon; ask the team if you 
 ## Before the deadline
 - Keep `README.md` filled in: what it does, who it's for, how to run it, screenshots, credits.
 - About an hour before the deadline, remind the team to record a 2-minute demo
-  and submit by opening a **🚀 Team submission** issue in the event repo
+  and submit by opening a **🚀 Team submission** issue in the event repo:
+  https://github.com/Claude-Community-Berlin/claude-impact-lab-berlin-2026-10-17
   (agenda, rules and deadline are there too).
