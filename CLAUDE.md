@@ -18,7 +18,7 @@ At the start, help the team write down in the README, in one sentence each:
 ## Event rules (remind the team if they drift)
 1. **Build today.** Ideas and research can come from before; the code is written on the day. No pre-built projects.
 2. **Claude must be part of the product**, not just the tool that wrote it.
-3. **Teams of up to 5**: technical, product or design, domain expert, founder, plus one flex seat.
+3. **Teams of 5**: at least 1 builder, 1 product or design and 1 domain expert; the other 2 seats can be a founder or anyone.
 4. **Public repo** with a README anyone can follow.
 5. **No secrets in Git.** API keys live in `.env` (git-ignored).
 6. **Open-source libraries, APIs and assets are fine.** Credit them in the README.
@@ -47,7 +47,7 @@ and a README that explains it matter more than extra features.
 If the team is behind, suggest cutting scope instead of working faster.
 
 ## Team collaboration
-- **Roles:** the technical person drives the code; product or design shapes the user flow and the demo script;
+- **Roles:** the builder drives the code; product or design shapes the user flow and the demo script;
   the domain expert speaks for the audience and tests every screen; the founder owns the pitch, the problem
   statement and the README. Everyone can prompt Claude.
 - **One repo, one owner.** The owner created it from the template and added teammates as collaborators.
