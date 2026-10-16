@@ -73,8 +73,10 @@ If the team is behind, suggest cutting scope instead of working faster.
 - Don't delete files the team created without asking.
 
 ## API key
-- Each person can claim $100 in API credits with the QR code in the room: sign in to the Claude Console and submit
-  the **Organization ID from the Console** (not the Claude.ai ID), once.
+- Each person can claim $100 in API credits with the QR code in the room: sign in with the Claude Console account
+  you will use today. Your organization is filled in for you; add your name and submit once.
+- Credits can take a while to arrive (the claim page says 1 to 2 business days). If yours are not there yet,
+  build with a teammate's key in the meantime. Credits work with the API only, not Claude.ai subscriptions.
 - Create an API key in the Console, run `cp .env.example .env` and paste the key into `.env`.
 
 ## Using Claude in the product
