@@ -32,9 +32,12 @@ cp .env.example .env    # paste your ANTHROPIC_API_KEY into .env
 <Drop screenshots here, or link your 2-minute demo video.>
 
 ## Team
+<!-- Link each name to a GitHub or LinkedIn profile. Replace the example row with your team. -->
 | Name | Role / background |
 |---|---|
-| | |
+| [Mehul Patel](https://github.com/nomadicmehul) *(example)* | Organizer, DevRel |
+| [Your name](https://www.linkedin.com/in/your-profile) | Designer / engineer / domain expert … |
+| [Your name](https://github.com/your-username) | |
 
 ## Credits
 <Open-source libraries, APIs, datasets and assets you used.>
