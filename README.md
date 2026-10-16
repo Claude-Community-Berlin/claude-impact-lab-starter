@@ -2,7 +2,7 @@
 >
 > 📅 **Agenda, rules, deadline and judging** are in the event repo: **[claude-impact-lab-berlin-2026-10-17](https://github.com/Claude-Community-Berlin/claude-impact-lab-berlin-2026-10-17)**. Read it first.
 >
-> ✅ **When you're finished:** submit by **[opening a 🚀 Team submission issue](https://github.com/Claude-Community-Berlin/claude-impact-lab-berlin-2026-10-17/issues/new?template=submission.yml)** in the event repo. Do it before the deadline.
+> ✅ **When you're finished:** record a 2-minute demo video, then submit with the **[submission form](https://tally.so/r/1WPr9Q)** before **16:00**. One submission per team.
 >
 > 🔑 Set your API key first: `cp .env.example .env`, then paste your key into `.env` (it's git-ignored, never commit it).
 
@@ -32,12 +32,12 @@ cp .env.example .env    # paste your ANTHROPIC_API_KEY into .env
 <Drop screenshots here, or link your 2-minute demo video.>
 
 ## Team
-Teams of 3–5. Link each name to a GitHub or LinkedIn profile, and replace the example row with your team.
+Teams of up to 5 (technical, product or design, domain expert, founder). Link each name to a GitHub or LinkedIn profile, and replace the example row with your team.
 
 | Name | Role / background |
 |---|---|
 | [Mehul Patel](https://github.com/nomadicmehul) *(example)* | Claude Ambassador, DevRel |
-| [Your name](https://www.linkedin.com/in/your-profile) | Designer / engineer / domain expert … |
+| [Your name](https://www.linkedin.com/in/your-profile) | Technical / Product or design / Domain expert / Founder |
 | [Your name](https://github.com/your-username) | |
 | [Your name](https://github.com/your-username) | |
 | [Your name](https://github.com/your-username) *(optional)* | |
