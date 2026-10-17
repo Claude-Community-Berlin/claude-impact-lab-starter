@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Freitags Pizza</title>
+<style>
+  :root {
+    --red: #c8102e; --cream: #fff8ec; --dark: #2b1d14; --muted: #7a6a5c;
+    --green: #2e7d32; --amber: #e8a317; --card: #ffffff; --line: #eadfce;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--cream); color: var(--dark); }
+  header { background: var(--red); color: #fff; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+  header h1 { margin: 0; font-size: 1.4rem; }
+  .cart-btn { background: #fff; color: var(--red); border: 0; border-radius: 20px; padding: 8px 14px; font-weight: 700; cursor: pointer; }
+  .hero { padding: 40px 16px 24px; text-align: center; max-width: 900px; margin: 0 auto; }
+  .hero h2 { font-size: 2rem; margin: 0 0 8px; }
+  .hero p { color: var(--muted); margin: 0; }
+  .rush { max-width: 900px; margin: 0 auto 20px; padding: 14px 16px; border-radius: 12px; font-weight: 600; }
+  .rush.busy { background: #fdecea; border: 2px solid var(--red); }
+  .rush.soon { background: #fff4d6; border: 2px solid var(--amber); }
+  .rush.calm { background: #e8f5e9; border: 2px solid var(--green); }
+  .rush small { display: block; font-weight: 400; margin-top: 4px; }
+  .filters { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; padding: 0 16px 16px; }
+  .filters button { border: 2px solid var(--red); background: #fff; color: var(--red); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 600; }
+  .filters button.active { background: var(--red); color: #fff; }
+  .menu { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; max-width: 1100px; margin: 0 auto; padding: 0 16px 40px; }
+  .item { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; }
+  .item .emoji { font-size: 2.6rem; }
+  .item h3 { margin: 8px 0 4px; font-size: 1.1rem; }
+  .item p { color: var(--muted); font-size: .9rem; margin: 0 0 12px; flex: 1; }
+  .tags span { display: inline-block; font-size: .75rem; background: var(--cream); border: 1px solid var(--line); border-radius: 10px; padding: 2px 8px; margin: 0 4px 8px 0; }
+  .row { display: flex; justify-content: space-between; align-items: center; }
+  .price { font-weight: 700; font-size: 1.1rem; }
+  .add { background: var(--red); color: #fff; border: 0; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-weight: 600; }
+  .cart { position: fixed; right: 0; top: 0; height: 100%; width: min(360px, 100%); background: #fff; box-shadow: -4px 0 20px rgba(0,0,0,.15); padding: 16px; transform: translateX(100%); transition: transform .2s; z-index: 20; display: flex; flex-direction: column; }
+  .cart.open { transform: none; }
+  .cart ul { list-style: none; padding: 0; flex: 1; overflow: auto; }
+  .cart li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .cart select, .cart button.order { width: 100%; padding: 10px; margin-top: 8px; border-radius: 8px; font-size: 1rem; }
+  .cart button.order { background: var(--red); color: #fff; border: 0; font-weight: 700; cursor: pointer; }
+  .msg { color: var(--green); font-weight: 600; margin-top: 8px; }
+  footer { text-align: center; color: var(--muted); padding: 20px 16px; font-size: .85rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🍕 Freitags Pizza</h1>
+  <button class="cart-btn" id="cartBtn">🛒 <span id="cartCount">0</span></button>
+</header>
+
+<section class="hero">
+  <h2>Wood-fired pizza &amp; fresh sandwiches</h2>
+  <p>Kreuzberg, Berlin · Open daily 11:30 – 23:00 · Pick-up &amp; delivery</p>
+</section>
+
+<div class="rush" id="rush"></div>
+
+<div class="filters" id="filters">
+  <button data-cat="all" class="active">All</button>
+  <button data-cat="pizza">Pizza</button>
+  <button data-cat="sandwich">Sandwiches</button>
+  <button data-cat="side">Sides &amp; Drinks</button>
+</div>
+
+<main class="menu" id="menu"></main>
+
+<aside class="cart" id="cart">
+  <div class="row"><h2>Your order</h2><button class="add" id="closeCart">✕</button></div>
+  <ul id="cartItems"></ul>
+  <div class="row"><strong>Total</strong><strong id="cartTotal">€0.00</strong></div>
+  <label for="slot">Pick-up time</label>
+  <select id="slot"></select>
+  <button class="order" id="orderBtn">Place order</button>
+  <div class="msg" id="orderMsg"></div>
+</aside>
+
+<footer>Demo site with sample data · Claude Impact Lab Berlin 2026</footer>
+
+<script>
+// Sample menu (fake data for the demo)
+const MENU = [
+  { id: 1,  cat: "pizza",    emoji: "🍕", name: "Margherita",         desc: "San Marzano tomato, fior di latte, basil, olive oil.", price: 9.5,  tags: ["veggie", "bestseller"] },
+  { id: 2,  cat: "pizza",    emoji: "🌶️", name: "Diavola",            desc: "Spicy salami, tomato, mozzarella, chili oil.",          price: 12.0, tags: ["spicy"] },
+  { id: 3,  cat: "pizza",    emoji: "🍄", name: "Funghi e Tartufo",   desc: "Mushrooms, truffle cream, mozzarella, thyme.",          price: 13.5, tags: ["veggie"] },
+  { id: 4,  cat: "pizza",    emoji: "🥓", name: "Quattro Stagioni",   desc: "Ham, artichokes, mushrooms, olives.",                   price: 13.0, tags: [] },
+  { id: 5,  cat: "pizza",    emoji: "🧀", name: "Quattro Formaggi",   desc: "Mozzarella, gorgonzola, parmesan, taleggio.",           price: 12.5, tags: ["veggie"] },
+  { id: 6,  cat: "pizza",    emoji: "🥬", name: "Vegan Verde",        desc: "Pesto, zucchini, spinach, cashew cheese.",              price: 12.0, tags: ["vegan"] },
+  { id: 7,  cat: "pizza",    emoji: "🍍", name: "Hawaii",             desc: "Ham, pineapple, mozzarella. Yes, we make it.",          price: 11.5, tags: [] },
+  { id: 8,  cat: "sandwich", emoji: "🥪", name: "Caprese Panino",     desc: "Mozzarella, tomato, basil pesto on focaccia.",          price: 7.5,  tags: ["veggie"] },
+  { id: 9,  cat: "sandwich", emoji: "🥖", name: "Italian Club",       desc: "Mortadella, salami, provolone, rocket, ciabatta.",      price: 8.5,  tags: ["bestseller"] },
+  { id: 10, cat: "sandwich", emoji: "🍗", name: "Chicken Pesto",      desc: "Grilled chicken, pesto, sun-dried tomato, focaccia.",   price: 8.9,  tags: [] },
+  { id: 11, cat: "sandwich", emoji: "🍆", name: "Melanzane",          desc: "Grilled aubergine, hummus, peppers, rocket.",           price: 7.9,  tags: ["vegan"] },
+  { id: 12, cat: "sandwich", emoji: "🥩", name: "Porchetta",          desc: "Slow-roasted pork, salsa verde, crispy onions.",        price: 9.5,  tags: [] },
+  { id: 13, cat: "side",     emoji: "🧄", name: "Garlic Bread",       desc: "Wood-fired, garlic butter, parsley.",                   price: 4.5,  tags: ["veggie"] },
+  { id: 14, cat: "side",     emoji: "🥗", name: "Rucola Salad",       desc: "Rocket, parmesan, cherry tomatoes, balsamic.",          price: 6.5,  tags: ["veggie"] },
+  { id: 15, cat: "side",     emoji: "🍰", name: "Tiramisu",           desc: "House-made, espresso, mascarpone.",                     price: 5.5,  tags: ["veggie"] },
+  { id: 16, cat: "side",     emoji: "🥤", name: "Lemonade",           desc: "Homemade, lemon and mint. 0.4 l.",                      price: 3.5,  tags: ["vegan"] },
+];
+
+// Rush hours: Friday (5) and Saturday (6), 17:00 – 22:00
+function rushStatus(now = new Date()) {
+  const day = now.getDay(), h = now.getHours();
+  const rushDay = day === 5 || day === 6;
+  if (rushDay && h >= 17 && h < 22) return "busy";
+  if (rushDay && h >= 15 && h < 17) return "soon";
+  return "calm";
+}
+
+function renderRush() {
+  const el = document.getElementById("rush");
+  const s = rushStatus();
+  el.className = "rush " + s;
+  el.innerHTML = {
+    busy: "🔥 Friday/Saturday rush: the kitchen is very busy (wait ~45 min).<small>Pre-order now and pick a time slot to skip the queue.</small>",
+    soon: "⏰ Rush hour starts at 17:00.<small>Order early and reserve your pick-up slot before the evening rush.</small>",
+    calm: "✅ The kitchen is quiet right now (wait ~15 min).<small>Busiest times: Friday and Saturday, 17:00 – 22:00.</small>",
+  }[s];
+}
+
+let filter = "all";
+const cart = {};
+
+function renderMenu() {
+  const items = MENU.filter(m => filter === "all" || m.cat === filter);
+  document.getElementById("menu").innerHTML = items.map(m => `
+    <div class="item">
+      <div class="emoji">${m.emoji}</div>
+      <h3>${m.name}</h3>
+      <div class="tags">${m.tags.map(t => `<span>${t}</span>`).join("")}</div>
+      <p>${m.desc}</p>
+      <div class="row">
+        <span class="price">€${m.price.toFixed(2)}</span>
+        <button class="add" data-id="${m.id}">Add</button>
+      </div>
+    </div>`).join("");
+}
+
+function renderCart() {
+  const ids = Object.keys(cart);
+  let total = 0, count = 0;
+  document.getElementById("cartItems").innerHTML = ids.map(id => {
+    const m = MENU.find(x => x.id == id), q = cart[id];
+    total += m.price * q; count += q;
+    return `<li><span>${q}× ${m.name}</span><span>€${(m.price * q).toFixed(2)}</span></li>`;
+  }).join("") || "<li>Nothing yet. Add something tasty!</li>";
+  document.getElementById("cartTotal").textContent = "€" + total.toFixed(2);
+  document.getElementById("cartCount").textContent = count;
+}
+
+// Pick-up slots every 15 min for the next 3 hours; mark rush slots
+function renderSlots() {
+  const sel = document.getElementById("slot");
+  const t = new Date();
+  t.setMinutes(Math.ceil(t.getMinutes() / 15) * 15 + 15, 0, 0);
+  const opts = [];
+  for (let i = 0; i < 12; i++) {
+    const label = t.toTimeString().slice(0, 5);
+    opts.push(`<option>${label}${rushStatus(t) === "busy" ? " (rush)" : ""}</option>`);
+    t.setMinutes(t.getMinutes() + 15);
+  }
+  sel.innerHTML = opts.join("");
+}
+
+document.getElementById("filters").addEventListener("click", e => {
+  if (!e.target.dataset.cat) return;
+  filter = e.target.dataset.cat;
+  document.querySelectorAll("#filters button").forEach(b => b.classList.toggle("active", b === e.target));
+  renderMenu();
+});
+document.getElementById("menu").addEventListener("click", e => {
+  const id = e.target.dataset.id;
+  if (!id) return;
+  cart[id] = (cart[id] || 0) + 1;
+  renderCart();
+});
+const cartEl = document.getElementById("cart");
+document.getElementById("cartBtn").onclick = () => cartEl.classList.add("open");
+document.getElementById("closeCart").onclick = () => cartEl.classList.remove("open");
+document.getElementById("orderBtn").onclick = () => {
+  const msg = document.getElementById("orderMsg");
+  if (!Object.keys(cart).length) { msg.textContent = "Your cart is empty."; return; }
+  msg.textContent = `✅ Order placed! Pick up at ${document.getElementById("slot").value.replace(" (rush)", "")}.`;
+  for (const k in cart) delete cart[k];
+  renderCart();
+};
+
+renderRush(); renderMenu(); renderCart(); renderSlots();
+</script>
+</body>
+</html>
